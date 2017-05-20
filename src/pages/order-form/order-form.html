@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>New Order</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content padding>
+
+  <ion-list>
+    
+    <ion-item padding>
+      <ion-label>Customer Name</ion-label>
+      <ion-input type="text" [(ngModel)]="order.customer"></ion-input>
+    </ion-item>
+    
+    <ion-item padding>
+      <ion-label>Phone No</ion-label>
+      <ion-input type="tel" [(ngModel)]="order.phone"></ion-input>
+    </ion-item>
+    
+    <ion-item padding>
+      <ion-label>Package Type</ion-label>
+      <ion-select [(ngModel)]="order.package">
+        <ion-option value="1">Single (1)</ion-option>
+        <ion-option value="5">Lite (5)</ion-option>
+        <ion-option value="20">Mid (20)</ion-option>
+        <ion-option value="50">Super (50)</ion-option>
+        <ion-option value="100">Mega (100)</ion-option>
+      </ion-select>
+    </ion-item>
+    
+    <ion-item padding-bottom>
+      <ion-label>Pick Up?</ion-label>
+      <ion-toggle checked="false" [(ngModel)]="order.delivery"></ion-toggle>
+    </ion-item>
+    <ion-item padding>
+      <button block ion-button padding round (click)="onSubmit($event)">Submit</button>
+      <button block ion-button padding round (click)="cancel($event)">Cancel</button>
+    </ion-item>
+
+  </ion-list>
+
+</ion-content>

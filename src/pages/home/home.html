@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Home</ion-title>
+    <ion-buttons end>
+      <button (click)="logout()" ion-button icon-left>
+        <ion-icon name="log-out"></ion-icon>
+        Log Out
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <h2 text-center>Welcome to The Virtual Laundry App</h2>
+  <p>
+    Welcome to the Virtual Laundry App. Here you can a refer and prefer blash
+  </p>
+  <ion-row justify-content-center margin>
+    <button ion-button outline color="warning" (click)='fillOrderForm()'>Create New Order</button> 
+  </ion-row>
+  <ion-row justify-content-center margin>
+    <button ion-button outline color="warning" (click)='clearStore()'>Clear All Data</button> 
+  </ion-row>
+</ion-content>
