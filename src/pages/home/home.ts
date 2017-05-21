@@ -20,6 +20,7 @@ export class HomePage {
     this.store.clearStore()
   }
   logout() {
+    this.db.logout()
     this.auth.logoutUser().then(()=>{
       this.navCtrl.setRoot(SignUp)
     })
@@ -30,6 +31,7 @@ export class HomePage {
     public store: StorageService, 
     public auth: Auth,
     public db: Database) {
+      
   }
 
 }

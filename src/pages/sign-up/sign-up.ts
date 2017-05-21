@@ -10,12 +10,7 @@ import { Database } from "../../providers/database";
 import { TabsPage } from "../tabs/tabs";
 import { ForgotPassword } from "../forgot-password/forgot-password";
 
-/**
- * Generated class for the SignUp page.
- *
- * See http://ionicframework.com/docs/components/#navigation for more info
- * on Ionic pages and navigation.
- */
+
 @IonicPage()
 @Component({
   selector: 'page-sign-up',
@@ -62,9 +57,9 @@ export class SignUp {
       console.log(this.loginForm.value);
     }else {
       this.auth.loginUser(this.loginForm.value.email, this.loginForm.value.password)
-      .then( auth => {
-        this.store.setUser(auth.uid);
-        this.db.syncOrders()
+      .then( user => {
+        this.store.setUser(user.uid);
+        this.db.setUp(user.uid)
         this.navCtrl.setRoot(TabsPage);
       }, error => {
         this.loading.dismiss().then( () => {
@@ -93,22 +88,15 @@ export class SignUp {
   goToResetPassword() {
     this.navCtrl.push(ForgotPassword)
   }
-  presentAlert(message) {
-    let myAlert = this.alertCtrl.create({
-      title : "Error",
-      message,
-      buttons:[{text:"Retry"}]
-    })
-    myAlert.present()
-  }
   signupUser(){
     if (!this.signupForm.valid){
       console.log(this.signupForm.value);
     } else {
       this.auth.signupUser(this.signupForm.value.email, this.signupForm.value.password)
-      .then((auth) => {
+      .then((user) => {
         this.auth.sendVerificationMail()//should use result to check if email actually exists before creating a/c 
-        this.store.setUser(auth.uid);  
+        this.store.setUser(user.uid); 
+        this.db.setUp(user.uid); 
         this.navCtrl.setRoot(TabsPage);
       }, (error) => {
         this.loading.dismiss().then( () => {

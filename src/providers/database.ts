@@ -2,29 +2,30 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database';
 import 'rxjs/add/operator/map';
+import { Subscription } from 'rxjs/Subscription';
 import { StorageService } from "./storage";
 
-/*
-  Generated class for the Database provider.
-
-  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
-  for more info on providers and Angular 2 DI.
-*/
 @Injectable()
 export class Database {
   items: FirebaseListObservable<any[]>;
   objects: FirebaseObjectObservable<any[]>;
-  url = `/db/users/${this.store.getUser()}/orders`
-
+  public url
+  private myEvent: Subscription
   constructor(public http: Http, public db: AngularFireDatabase, public store: StorageService) {
-    this.items = db.list(this.url);
-
+     
+  }
+  setUp(uid) {
+    this.url = `/db/users/${this.store.getUser()}/orders`
+    this.items = this.db.list(this.url);
     console.info(`connecting to ${this.url}`)
-    this.items.subscribe(val => {
+    this.myEvent = this.items.subscribe(val => {
       console.log('Items, ', val)
     }, (err)=>{
       console.log("An error occured while getting online orders")
-    })  
+    })
+  }
+  logout() {
+    this.myEvent.unsubscribe()
   }
   createOrder(order) {
     this.items.push(order)
@@ -33,9 +34,10 @@ export class Database {
     // this.items = this.store.getOrders()
   }
   getOrders() {
-    return this.items.subscribe(val => {
+    return this.items.map(val => {
       this.store.loadOrders(val)
       console.log("Loaded, ", val)
+      return val
     }, (err)=> {
       console.log(`An error occured during Sync`)
     })
@@ -48,6 +50,6 @@ export class Database {
   }
   reloadUser(user?) {
     this.syncNotifications()
-    this.getOrders()
+    this.getOrders().subscribe()
   }
 }

@@ -92,9 +92,9 @@ export class StorageService {
     this.user = uid
   }
   getUser() {
-    this.storage.get("uid").then(val=>{
+    this.storage.get("uid").then(val=> {
       this.user = val
-      console.log(val, this.user)
+      console.log("Getting user ",val," as ", this.user)
     })
     return this.user
   }

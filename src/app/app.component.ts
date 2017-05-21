@@ -39,10 +39,9 @@ export class MyApp {
     const authObserver = afAuth.authState.subscribe( user => {
       if (user) {
         this.rootPage = TabsPage;
-        console.log(user)
-        this.db.syncOrders()
         this.store.setUser(user.uid)
         authObserver.unsubscribe();
+        this.db.setUp(user.uid)
       } else {
         this.rootPage = SignUp;
         authObserver.unsubscribe();

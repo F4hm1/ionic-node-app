@@ -5,12 +5,7 @@ import { OrdersPage } from '../orders/orders';
 import { HomePage } from '../home/home';
 
 
-/**
- * Generated class for the Tab tabs.
- *
- * See https://angular.io/docs/ts/latest/guide/dependency-injection.html for
- * more info on providers and Angular DI.
- */
+
 @Component({
   selector: 'page-tabs',
   templateUrl: 'tabs.html'
