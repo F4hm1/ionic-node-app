@@ -9,14 +9,16 @@ import { CloudModule, CloudSettings } from '@ionic/cloud-angular'
 import { MyApp } from './app.component';
 
 import { NotificationsPage } from '../pages/notifications/notifications';
-import { OrdersPage } from '../pages/orders/orders';
+import { OrdersPage, MyPopOver } from '../pages/orders/orders';
 import { HomePage } from '../pages/home/home';
 import { ForgotPassword } from '../pages/forgot-password/forgot-password';
 import { TabsPage } from '../pages/tabs/tabs';
+import { ProfilePage } from '../pages/profile/profile';
 import { OrderForm } from '../pages/order-form/order-form';
 import { SignUp } from '../pages/sign-up/sign-up';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { Network } from '@ionic-native/network';
 
 import { StorageService } from "../providers/storage";
 import { Auth } from "../providers/auth";
@@ -46,8 +48,10 @@ export const firebaseConfig = {
     OrdersPage,
     HomePage,
     TabsPage,
+    ProfilePage,
     ForgotPassword,
     OrderForm,
+    MyPopOver,
     SignUp
   ],
   imports: [
@@ -68,8 +72,10 @@ export const firebaseConfig = {
     OrdersPage,
     HomePage,
     TabsPage,
+    ProfilePage,
     ForgotPassword,
     OrderForm,
+    MyPopOver,
     SignUp
   ],
   providers: [
@@ -77,6 +83,7 @@ export const firebaseConfig = {
     SplashScreen,
     StorageService,
     Auth,
+    Network,
     Database,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]

@@ -20,6 +20,9 @@ export class Auth {
   loginUser(newEmail: string, newPassword: string): firebase.Promise<any> {
     return this.afAuth.auth.signInWithEmailAndPassword(newEmail, newPassword);
   }
+  signupWithGmail() {
+    this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+  }
   resetPassword(email: string): firebase.Promise<any> {
     return this.afAuth.auth.sendPasswordResetEmail(email);
   }

@@ -19,11 +19,8 @@ export class HomePage {
   clearStore() {
     this.store.clearStore()
   }
-  logout() {
-    this.db.logout()
-    this.auth.logoutUser().then(()=>{
-      this.navCtrl.setRoot(SignUp)
-    })
+  ntwrkLog() {
+    // window.Connection;
   }
   constructor(public navCtrl: NavController, 
     public alertCtrl: AlertController, 
@@ -31,7 +28,7 @@ export class HomePage {
     public store: StorageService, 
     public auth: Auth,
     public db: Database) {
-      
+      this.db.getOrders()
   }
 
 }

@@ -1,29 +1,32 @@
 <ion-header>
-
   <ion-navbar>
     <ion-title>
-      Spinclinix
+      Spincleanix
     </ion-title>
   </ion-navbar>
-  <ion-segment>
-    <ion-segment-button (click)="setStrategy(1)">
-      Sign Up
-    </ion-segment-button>
-    <ion-segment-button (click)="setStrategy(2)">
-      Log in
-    </ion-segment-button>
-  </ion-segment>
+
+  <ion-toolbar no-border>
+    <ion-segment [(ngModel)]="strategy">
+      <ion-segment-button value="signup">
+        Sign Up
+      </ion-segment-button>
+      <ion-segment-button value="login">
+        Log in
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
 </ion-header>
 
 
-<ion-content padding>
-  <div [ngSwitch]="strategy">
-    <form *ngSwitchCase="1"  [formGroup]="signupForm" (submit)="signupUser()" novalidate>
 
+<ion-content padding>
+  
+  <div [ngSwitch]="strategy">
+    <form *ngSwitchCase="'signup'"  [formGroup]="signupForm" (submit)="signupUser()" novalidate>
+      <h1 text-center>SIGN UP</h1>
       <ion-item>
         <ion-label stacked>Email</ion-label>
-        <ion-input formControlName="email" type="email" placeholder="Your email address"
-          [class.invalid]="!signupForm.controls.email.valid && signupForm.controls.email.dirty"></ion-input>
+        <ion-input formControlName="email" type="email" placeholder="Your email address" [class.invalid]="!signupForm.controls.email.valid && signupForm.controls.email.dirty"></ion-input>
       </ion-item>
       <ion-item class="error-message" *ngIf="!signupForm.controls.email.valid  && signupForm.controls.email.dirty">
         <p>Please enter a valid email.</p>
@@ -38,15 +41,15 @@
         <p>Your password needs more than 6 characters.</p>
       </ion-item>
 
-      <button ion-button block type="submit">
+      <button margin-vertical [class.disabled]="!signupForm.controls.password.valid || !signupForm.controls.email.valid" ion-button block type="submit">
         Create an Account
       </button>
 
+      <button ion-button  margin-vertical block (click)="signupWithGmail()" icon-left color="danger"><ion-icon name="mail"></ion-icon> Sign up with Gmail</button>
     </form>
-
     
-    <form *ngSwitchCase="2" [formGroup]="loginForm" (submit)="loginUser()" novalidate>
-
+    <form *ngSwitchCase="'login'" [formGroup]="loginForm" (submit)="loginUser()" novalidate>
+      <h1 text-center>LOG IN</h1>
       <ion-item>
         <ion-label stacked>Email</ion-label>
         <ion-input #email formControlName="email" type="email" placeholder="Your email address" [class.invalid]="!loginForm.controls.email.valid && loginForm.controls.email.dirty"></ion-input>
@@ -64,10 +67,10 @@
         <p>Your password needs more than 6 characters.</p>
       </ion-item>
 
-      <button ion-button block type="submit">
+      <button margin-buttom ion-button block [class.disabled]="!loginForm.controls.password.valid || !loginForm.controls.email.valid" type="submit">
         Login
       </button>
-      <button ion-button block clear (click)="goToResetPassword()">
+      <button margin-top ion-button block clear (click)="goToResetPassword()">
         I forgot my password 🙁
       </button>
     </form>

@@ -10,23 +10,25 @@
   <ion-refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <h4 text-center *ngIf="!orders.length">You have not made any order yet</h4>
+  <h4 text-center *ngIf="!orders[0]">You have not made any order yet</h4>
+  <ion-list no-border>
 
-  <ion-item class="orders" *ngFor="let order of orders; let i =index">
-    <h3 icon-left class="order-heading">
-      <ion-icon name="pricetag"></ion-icon>
-      Customer: {{order.customer}}
-    </h3>
-    <p>
-      Phone no: {{order.phone}},
-      Package: {{order.package}},
-      Delivery: {{order.delivery ? "Yes" : "No"}}
-    </p>
-    <button (click)="deleteOrder(i)" ion-button outline item-right icon-left>
-      <ion-icon name="trash"></ion-icon>
-      Delete
-    </button>
-  </ion-item>
+    <ion-item-sliding class="orders" (click)="viewOrder(order, $event)" *ngFor="let order of orders; let i =index">
+
+      <ion-item >
+        <ion-icon item-left name="pricetag"></ion-icon>
+        {{order.customer}}
+      </ion-item>
+
+      <ion-item-options>
+        <button ion-button icon-only color="danger" (click)="deleteOrder(i)" >
+          <ion-icon item-right name="trash"></ion-icon>
+        </button>
+      </ion-item-options>  
+
+    </ion-item-sliding>
+      
+  </ion-list>
 
   <ion-fab right bottom>
     <button (click)="createNew()" ion-fab ><ion-icon name="add"></ion-icon></button>

@@ -1,7 +1,19 @@
+@keyframes slide-in {
+  0% { transform: translateX(-100%)}
+  70% { transform: translateX(20%)}
+  100% { transform: translateX(0%)}
+}
+
 page-orders {
   .orders  {
+    animation-name: slide-in;
+    animation-duration: 500ms;
+    animation-timing-function: ease-out;
     h3 {
       padding: 4px 0px 0px 0px;
+    }
+    .ion-icon {
+      margin-right: 0px;
     }
   }
 }

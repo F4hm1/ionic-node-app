@@ -23,7 +23,7 @@ var app = express()
 
 
 var port = 4012
-mongoose.connect("mongodb://127.0.0.1/spinclinix")
+mongoose.connect("mongodb://127.0.0.1/Spincleanix")
 console.log("Connected to database")
 
 app.use("/assets", express.static("public"))
@@ -45,7 +45,7 @@ app.get('/', (req, res)=> {
 
 
 app.all('/admin', (req, res)=> {
-  res.render("index")
+  res.sendFile(__dirname +"/public/index.html")
 })
 
 app.all('*', (req, res)=> {

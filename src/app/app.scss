@@ -1,6 +1,16 @@
 // http://ionicframework.com/docs/v2/theming/
+@keyframes enlarge {
+  0% {transform:scale3d(0) }
+  100% {transform:scale3d(1.2) }
+}
 
 
+h1,h2,h3,h4 {
+  font-weight: 300;
+}
+ion-buttons {
+  display: inline-block
+}
 // App Global Sass
 // --------------------------------------------------
 // Put style rules here that you want to apply globally. These

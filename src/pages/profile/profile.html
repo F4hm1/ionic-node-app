@@ -1,0 +1,43 @@
+<!--
+  Generated template for the Profile page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{username || 'Profile'}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+  <ion-avatar>
+    <img src="/assets/img/hello.jpg">
+  </ion-avatar>
+  <ion-list>
+    <ion-item>
+      Name : {{username}}
+    </ion-item>
+    <ion-item>
+      Phone No : {{phone}}
+    </ion-item>
+    <ion-item>
+      Email : {{email}}
+    </ion-item>
+    <ion-item text-wrap *ngIf="!isVerifed">
+      Your account is not yet verified. Check your mail
+      <button ion-button block (click)="sendVerificationMail()">Resend Verification mail</button> 
+    </ion-item>
+    <ion-item>
+      <ion-buttons start>
+        <button ion-button padding color='secondary' (click)="updateProfile()">Update Profile</button>
+      </ion-buttons>
+      <ion-buttons end>
+        <button ion-button padding (click)="logout()">Log out</button>
+      </ion-buttons>
+    </ion-item>
+  </ion-list>
+
+</ion-content>

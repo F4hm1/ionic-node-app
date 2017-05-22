@@ -22,7 +22,7 @@ export class SignUp {
   loading: Loading;
   loginForm:FormGroup;
   signupForm:FormGroup;
-  strategy: number = 1;
+  strategy: string= "signup"
 
   constructor(
     public navCtrl: NavController, 
@@ -45,14 +45,15 @@ export class SignUp {
       });
   }
   
-  setStrategy(n: number){
-    this.strategy = n
-    console.log(this.strategy)
+  signupWithGmail() {
+    // this.auth.signupWithGmail()
+    this.presentAlert("Don't be lazy enter your email and a password")
   }
   loginUser(){
-    if (this.loginForm.value.email === "Ekene") {
+    if (this.loginForm.value.email === "Melvin") {
       this.navCtrl.setRoot(TabsPage)
       this.store.setUser(this.loginForm.value.email)
+      this.db.getOrders()
     } else if (!this.loginForm.valid){
       console.log(this.loginForm.value);
     }else {
@@ -63,16 +64,10 @@ export class SignUp {
         this.navCtrl.setRoot(TabsPage);
       }, error => {
         this.loading.dismiss().then( () => {
-          let alert = this.alertCtrl.create({
-            message: error.message,
-            buttons: [
-              {
-                text: "Ok",
-                role: 'cancel'
-              }
-            ]
-          });
-          alert.present();
+        this.presentAlert(error.message)
+        }).catch(err=> {
+          this.loading.dismiss()
+          this.presentAlert("Is it me or there is no data conection?")
         });
       });
 
@@ -101,16 +96,10 @@ export class SignUp {
       }, (error) => {
         this.loading.dismiss().then( () => {
           var errorMessage: string = error.message;
-            let alert = this.alertCtrl.create({
-              message: errorMessage,
-              buttons: [
-                {
-                  text: "Ok",
-                  role: 'cancel'
-                }
-              ]
-            });
-          alert.present();
+          this.presentAlert(errorMessage)
+        }).catch(err=> {
+          this.loading.dismiss()
+          this.presentAlert("Is it me or there is no data connection?")
         });
       });
 
@@ -119,6 +108,19 @@ export class SignUp {
       });
       this.loading.present();
     }
+  }
+
+  presentAlert(msg) {
+    let alert = this.alertCtrl.create({
+      message: msg,
+      buttons: [
+        {
+          text: "Ok",
+          role: 'cancel'
+        }
+      ]
+    });
+    alert.present();
   }
 
 }

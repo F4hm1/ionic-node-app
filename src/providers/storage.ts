@@ -13,7 +13,8 @@ export interface Order {
   customer : string,
   phone: number,
   package: number,
-  delivery: boolean
+  delivery: boolean,
+  date: Date
 }
 @Injectable()
 export class StorageService {
@@ -21,6 +22,7 @@ export class StorageService {
   user = ''
   headers = new Headers({ 'Content-Type': 'application/json' });
   options = new RequestOptions({ headers: this.headers });
+  networkConnected: boolean = true
 
   constructor(public http: Http, public storage: Storage) {
     console.log('Hello Service Provider');
@@ -35,9 +37,10 @@ export class StorageService {
       } else {
         orders = JSON.parse(val)
       }
-      console.log(orders)
+      console.log("Before ", orders)
       orders.push(order) 
       this.orders = orders;
+      console.log("Now ", orders)
       return orders;
     }).then((orders)=> {
       this.storage.set('orders', JSON.stringify(orders))
@@ -46,8 +49,8 @@ export class StorageService {
   }
   
   loadOrders(orders) {
-    console.log("reloading your orders")
-    this.storage.set('orders', JSON.stringify(orders))
+    console.log("New orders are", orders )
+    return this.storage.set('orders', JSON.stringify(orders))
   }
   loadNotifications(notifications){
     this.storage.set('notifications', JSON.stringify(notifications))
@@ -57,12 +60,6 @@ export class StorageService {
       let oldNotifications = JSON.parse(val)
       oldNotifications.concat(notification)
     })
-  }
-  syncOrders() {
-    // this.storage.get('orders').then(orders => {
-    // console.log("Syncing orders ", orders)
-    // return this.http.post("http://localhost:4012/api/sync-orders", {orders}, this.options)
-    // })
   }
 
   getOrders() {
@@ -75,7 +72,7 @@ export class StorageService {
     })
     return Observable.fromPromise(orders)
   }
-
+  
   clearStore() {
     this.storage.remove("orders").then(()=> {
       console.log("storage is now empty")

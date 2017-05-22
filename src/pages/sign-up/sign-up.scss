@@ -1,8 +1,7 @@
 page-sign-up {
   form {
-        margin-bottom: 32px;
         button {
-            margin-top: 20px;
+            margin-top: 80px;
         }
     }
 
@@ -25,5 +24,8 @@ page-sign-up {
 
     .error-message .item-inner {
         border-bottom: 0 !important;
+    }
+    .disabled {
+        background-color: #d2d2d2;
     }
 }

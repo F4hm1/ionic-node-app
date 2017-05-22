@@ -27,7 +27,7 @@
         <ion-option value="100">Mega (100)</ion-option>
       </ion-select>
     </ion-item>
-    
+    <input type="hidden"[(ngModel)]="date" >
     <ion-item padding-bottom>
       <ion-label>Pick Up?</ion-label>
       <ion-toggle checked="false" [(ngModel)]="order.delivery"></ion-toggle>

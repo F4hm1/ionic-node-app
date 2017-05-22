@@ -14,12 +14,13 @@ export class OrderForm {
     customer: 'Dele',
     phone: 0,
     package: 5,
-    delivery: false
+    delivery: false,
+    date : new Date()
   }
   constructor(public navCtrl: NavController, 
     public navParams: NavParams, 
     public viewCtrl: ViewController, 
-    public service: StorageService, 
+    public store: StorageService, 
     public alertCtrl:AlertController, 
     public db: Database) {
   }
@@ -28,13 +29,15 @@ export class OrderForm {
   }
   onSubmit() {
     if (this.order.customer.length < 3) this.presentAlert(`Customer name is invalid`)
-    else if (this.order.phone < 1 || !(this.order.phone < Infinity) ) this.presentAlert('Please input a valid Phone Number')
+    else if (this.order.phone.toString().length < 9 || this.order.phone.toString().length > 11 ) this.presentAlert('Please input a valid Phone Number')
     else if (this.order.package < 1) this.presentAlert('Please input package Type')
     else {
-      this.db.createOrder(this.order)
-      this.service.addOrder(this.order).then(() => {
+      console.log(this.order)
+      this.store.addOrder(this.order).then(() => {
         this.presentAlert();
         this.viewCtrl.dismiss()
+      }).then((val)=>{
+        this.db.syncOrders()
       })
     }
   } 
@@ -45,10 +48,6 @@ export class OrderForm {
         buttons: [{text: "Ok"}]
       })
       alert.present()
-  }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad OrderForm');
   }
 
 }
