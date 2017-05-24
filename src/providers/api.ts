@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions } from '@angular/http';
-import { StorageService, Order } from "./storage";
+import { StorageService } from "./storage";
 import 'rxjs/add/operator/map';
 
 /*

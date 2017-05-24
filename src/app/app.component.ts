@@ -6,7 +6,7 @@ import { Network } from '@ionic-native/network';
 
 import { SignUp } from '../pages/sign-up/sign-up';
 import { HomePage } from "../pages/home/home";
-import { TabsPage } from "../pages/tabs/tabs";
+import { ProfilePage } from "../pages/profile/profile";
 import { NotificationsPage } from "../pages/notifications/notifications";
 import { OrdersPage } from "../pages/orders/orders";
 
@@ -24,7 +24,8 @@ export class MyApp {
   pages = [
     { title: "Home", component: HomePage, icon: "home" },
     { title: "Orders", component: OrdersPage, icon: "cart" },
-    { title: "Notifications", component: NotificationsPage, icon: "notifications" }
+    { title: "Notifications", component: NotificationsPage, icon: "notifications" },
+    { title: "Profile", component: ProfilePage, icon: "contact" }
   ]
 
   openPage(p) {
@@ -38,11 +39,11 @@ export class MyApp {
       splashScreen.hide();
     }).then(()=> {
       console.log("Checking connection ", this.network.type)
-      let disconnectSubscription = this.network.onDisconnect().subscribe(() => {
+      this.network.onDisconnect().subscribe(() => {
         this.store.networkConnected = false
         console.log('network was disconnected :-(');
       });
-      let connectSubscription = this.network.onConnect().subscribe( _=> {
+      this.network.onConnect().subscribe( _=> {
         this.store.networkConnected = true
         setTimeout(() => {
           this.db.syncOrders()
@@ -55,7 +56,7 @@ export class MyApp {
     const authObserver = afAuth.authState.subscribe( user => {
       if (user) {
         this.db.setUp(user.uid)
-        this.rootPage = TabsPage;
+        this.rootPage = HomePage
         this.db.syncOrders()
         this.store.setUser(user.uid)
         authObserver.unsubscribe();

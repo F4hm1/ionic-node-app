@@ -1,3 +1,11 @@
-page-profile {
+$avatar-width: 60vw;
 
+page-profile {
+    img.profile-avatar {
+      width: $avatar-width;
+      height: $avatar-width;
+      border-radius: 50%;
+      display: absolute;
+      margin: auto;
+    }
 }

@@ -65,7 +65,7 @@ export class OrdersPage {
     popOver.present()
   }
   ionViewWillEnter() {
-    console.log("About to enter page")
+    console.log("About to enter orders page")
     this.store.getOrders().subscribe(val => {
       this.orders = val
       console.log("Stored Orders ", val)

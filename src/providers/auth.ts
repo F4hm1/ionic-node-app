@@ -29,6 +29,17 @@ export class Auth {
   logoutUser(): firebase.Promise<any> {
     return this.afAuth.auth.signOut();
   }
+  signinWithPhone() {
+    // this.afAuth.auth.siginWithPhoneNo
+    // let app = new firebase.auth.RecaptchaVerifier('sign-in-button', {
+    //   'size': 'invisible',
+    //   'callback': function(response) {
+    //     reCAPTCHA solved, allow signInWithPhoneNumber.
+    //     onSignInSubmit();
+    //   }
+    // })
+    // https://firebase.google.com/docs/auth/web/phone-auth
+  }
   signupUser(newEmail: string, newPassword: string): firebase.Promise<any> {
     return this.afAuth.auth.createUserWithEmailAndPassword(newEmail, newPassword);
   }
@@ -42,19 +53,14 @@ export class Auth {
     return this.afAuth.auth.currentUser.updatePhoneNumber(no)
   }
   updatePasword(oldPassword, newPassword) {
-    //  User should reinput old pasword 1st--- currentUser.reauthenticate check: https://firebase.google.com/docs/auth/web/manage-users
-    // return this.afAuth.auth.currentUser.updatePassword(password)
-  }
-  updateEmail(oldPassword, newEmail) {
-    //  User should reinput old pasword 1st using--- currentUser.reauthenticate
-    // return this.afAuth.auth.currentUser.updateEmail(newEmail)
+    return this.afAuth.auth.currentUser.updatePassword(newPassword)
   }
   verified() {
-    //user might not probably create order until verified
+    //user might not probably create orders until verified
     return this.afAuth.auth.currentUser.emailVerified
   }
   sendVerificationMail() {
-    return this.afAuth.auth.currentUser.sendEmailVerification().then(()=> true, ()=> false)
+    return this.afAuth.auth.currentUser.sendEmailVerification()
   }
 
 }

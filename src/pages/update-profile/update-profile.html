@@ -1,0 +1,42 @@
+<ion-header>
+
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Update Profile</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list>
+
+    <ion-item>
+      <ion-label stacked>Username</ion-label>
+      <ion-input inset (ngModelChange)="showUsername()" [(ngModel)]="data.displayName" type="text"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label stacked>Phone Number</ion-label>
+      <ion-input inset [(ngModel)]="data.phoneNumber" type="phone"></ion-input>
+    </ion-item>
+
+    <!--<ion-item>
+      <ion-label stacked>Email</ion-label>
+      <ion-input inset [(ngModel)]="data.email" type="email"></ion-input>
+    </ion-item>-->
+
+    <ion-item>
+      <ion-label stacked>Input your password to save</ion-label>
+      <ion-input inset (ngModelChange)="showUsername()" [(ngModel)]="password" type="password"></ion-input>
+    </ion-item>
+
+    <ion-list>
+      <ion-buttons end>
+        <button (click)="update()" ion-button padding>Submit</button>
+      </ion-buttons>
+    </ion-list>
+  </ion-list>
+</ion-content>

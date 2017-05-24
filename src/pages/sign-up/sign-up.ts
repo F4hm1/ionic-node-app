@@ -3,11 +3,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IonicPage, NavController, NavParams, AlertController, LoadingController, Loading, } from 'ionic-angular';
 import { Auth } from '../../providers/auth';
 import { EmailValidator } from '../../validators/email';
+import { HomePage } from "../home/home";
 
 import { StorageService } from "../../providers/storage";
 import { Database } from "../../providers/database";
 
-import { TabsPage } from "../tabs/tabs";
 import { ForgotPassword } from "../forgot-password/forgot-password";
 
 
@@ -51,7 +51,7 @@ export class SignUp {
   }
   loginUser(){
     if (this.loginForm.value.email === "Melvin") {
-      this.navCtrl.setRoot(TabsPage)
+      this.navCtrl.setRoot(HomePage)
       this.store.setUser(this.loginForm.value.email)
       this.db.getOrders()
     } else if (!this.loginForm.valid){
@@ -61,7 +61,7 @@ export class SignUp {
       .then( user => {
         this.store.setUser(user.uid);
         this.db.setUp(user.uid)
-        this.navCtrl.setRoot(TabsPage);
+        this.navCtrl.setRoot(HomePage);
       }, error => {
         this.loading.dismiss().then( () => {
         this.presentAlert(error.message)
@@ -92,7 +92,7 @@ export class SignUp {
         this.auth.sendVerificationMail()//should use result to check if email actually exists before creating a/c 
         this.store.setUser(user.uid); 
         this.db.setUp(user.uid); 
-        this.navCtrl.setRoot(TabsPage);
+        this.navCtrl.setRoot(HomePage);
       }, (error) => {
         this.loading.dismiss().then( () => {
           var errorMessage: string = error.message;

@@ -1,14 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers , RequestOptions } from '@angular/http';
 import { Storage } from "@ionic/storage";
 import { Observable } from "rxjs/Observable";
 
-/*
-  Generated class for the Service provider.
 
-  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
-  for more info on providers and Angular 2 DI.
-*/
 export interface Order {
   customer : string,
   phone: number,
@@ -19,12 +13,11 @@ export interface Order {
 @Injectable()
 export class StorageService {
   orders = []
+  notifications = []
   user = ''
-  headers = new Headers({ 'Content-Type': 'application/json' });
-  options = new RequestOptions({ headers: this.headers });
   networkConnected: boolean = true
 
-  constructor(public http: Http, public storage: Storage) {
+  constructor(public storage: Storage) {
     console.log('Hello Service Provider');
     this.getOrders()
   }
@@ -52,16 +45,26 @@ export class StorageService {
     console.log("New orders are", orders )
     return this.storage.set('orders', JSON.stringify(orders))
   }
-  loadNotifications(notifications){
-    this.storage.set('notifications', JSON.stringify(notifications))
+  loadNotifications(notifications) {
+    console.log("New notification are", notifications )
+    return this.storage.set('notifications', JSON.stringify(notifications))
   }
-  storeNewNotification(notification) {
-    this.storage.get('notifications').then(val=> {
-      let oldNotifications = JSON.parse(val)
-      oldNotifications.concat(notification)
+  // storeNewNotification(notification) {
+  //   this.storage.get('notifications').then(val=> {
+  //     let oldNotifications = JSON.parse(val)
+  //     oldNotifications.concat(notification)
+  //   })
+  // }
+  getNotifications() {
+    let notifications = this.storage.get("notifications").then(val=> {
+      if (val !== null) {
+        return JSON.parse(val)
+      } else {
+        return []
+      }      
     })
+    return Observable.fromPromise(notifications)
   }
-
   getOrders() {
     let orders = this.storage.get('orders').then(val=> {
       if (val !== null) {
@@ -74,12 +77,8 @@ export class StorageService {
   }
   
   clearStore() {
-    this.storage.remove("orders").then(()=> {
+    return this.storage.remove("orders").then(()=> {
       console.log("storage is now empty")
-    }).then((res)=> {
-      this.storage.get('orders').then((val)=> {
-        console.log(`Orders still has ${val}`)
-      })
     })
   }
   setUser(uid) {
@@ -95,5 +94,4 @@ export class StorageService {
     })
     return this.user
   }
-
 }
