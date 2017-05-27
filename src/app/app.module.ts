@@ -23,6 +23,7 @@ import { Network } from '@ionic-native/network';
 import { StorageService } from "../providers/storage";
 import { Auth } from "../providers/auth";
 import { Database } from "../providers/database";
+import { Api } from "../providers/api";
 import { AngularFireModule } from "angularfire2";
 import { AngularFireDatabaseModule } from "angularfire2/database";
 import { AngularFireAuthModule } from 'angularfire2/auth';
@@ -72,6 +73,7 @@ import { firebaseConfig, cloudSettings } from "./config";
     Auth,
     Network,
     Database,
+    Api,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

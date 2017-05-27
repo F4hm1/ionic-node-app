@@ -2,7 +2,6 @@ import { Component, ViewChild } from '@angular/core';
 import { Platform, Nav } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { Network } from '@ionic-native/network';
 
 import { SignUp } from '../pages/sign-up/sign-up';
 import { HomePage } from "../pages/home/home";
@@ -12,7 +11,7 @@ import { OrdersPage } from "../pages/orders/orders";
 
 import { AngularFireAuth } from 'angularfire2/auth';
 import { StorageService } from "../providers/storage";
-import { Database } from "../providers/database";
+import { Api } from "../providers/api";
 
 @Component({
   templateUrl: 'app.html'
@@ -31,34 +30,19 @@ export class MyApp {
   openPage(p) {
     this.nav.setRoot(p.component)
   }
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, afAuth: AngularFireAuth, public store: StorageService, public db: Database, public network: Network) {
+  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, afAuth: AngularFireAuth, public store: StorageService, public api: Api) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
       splashScreen.hide();
-    }).then(()=> {
-      console.log("Checking connection ", this.network.type)
-      this.network.onDisconnect().subscribe(() => {
-        this.store.networkConnected = false
-        console.log('network was disconnected :-(');
-      });
-      this.network.onConnect().subscribe( _=> {
-        this.store.networkConnected = true
-        setTimeout(() => {
-          this.db.syncOrders()
-            console.log('we got a wifi connection, woohoo!');
-        }, 2000);
-      });
     })
-    // connectSubscription.unsubscribe();
 
     const authObserver = afAuth.authState.subscribe( user => {
       if (user) {
-        this.db.setUp(user.uid)
         this.rootPage = HomePage
-        this.db.syncOrders()
-        this.store.setUser(user.uid)
+        this.store.setUID(user.uid)
+        this.api.onResume()
         authObserver.unsubscribe();
       } else {
         this.rootPage = SignUp;

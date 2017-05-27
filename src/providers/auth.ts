@@ -62,5 +62,8 @@ export class Auth {
   sendVerificationMail() {
     return this.afAuth.auth.currentUser.sendEmailVerification()
   }
+  deleteAccount() {
+    this.afAuth.auth.currentUser.delete()
+  }
 
 }

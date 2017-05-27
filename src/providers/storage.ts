@@ -43,11 +43,15 @@ export class StorageService {
   
   loadOrders(orders) {
     console.log("New orders are", orders )
-    return this.storage.set('orders', JSON.stringify(orders))
+    return this.storage.set('orders', JSON.stringify(orders)).then(()=> {
+      return orders
+    })
   }
   loadNotifications(notifications) {
     console.log("New notification are", notifications )
-    return this.storage.set('notifications', JSON.stringify(notifications))
+    return this.storage.set('notifications', JSON.stringify(notifications)).then(()=> {
+      return notifications
+    })
   }
   // storeNewNotification(notification) {
   //   this.storage.get('notifications').then(val=> {
@@ -81,13 +85,24 @@ export class StorageService {
       console.log("storage is now empty")
     })
   }
-  setUser(uid) {
+  setUser(data) {
+    console.log("USer data", data)
+    console.log("User data recieved ",data)
+    this.storage.set("user", JSON.stringify(data))
+    this.storage.set("userID", data._id)
+  }
+  getUser() {
+    return this.storage.get("user").then(val=> {
+      return JSON.parse(val)
+    })
+  }
+  setUID(uid) {
     this.storage.set('uid', uid).then(_ => {
       console.log('User id set as ', uid)
     })
     this.user = uid
   }
-  getUser() {
+  getUID() {
     this.storage.get("uid").then(val=> {
       this.user = val
       console.log("Getting user ",val," as ", this.user)

@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, ModalController, PopoverController } from 'ionic-angular';
 import { StorageService } from "../../providers/storage";
-import { Database } from "../../providers/database";
-import { HomePage } from "../home/home";
+import { Api } from "../../providers/api";
 import { OrderForm } from "../order-form/order-form";
 
 @Component({
@@ -40,24 +39,25 @@ export class MyPopOver {
 })
 export class OrdersPage {
   public orders = []
+  constructor(public navCtrl: NavController, public store: StorageService, public modalCtrl: ModalController, public popOver: PopoverController, public api: Api) {}
 
   doRefresh(refresh) {
-    this.db.getOrders()
+    this.api.getOrders()
     refresh.complete()
     this.ionViewWillEnter()
   }
   
   createNew() {
-    this.navCtrl.setRoot(HomePage)
     let modal = this.modalCtrl.create(OrderForm)
     modal.present()
   }
 
   deleteOrder(i) {
-    this.orders.splice(i ,1)
-    this.store.loadOrders(this.orders).then(val => {
-      this.db.syncOrders()
+    let deletedOrder = this.orders.splice(i ,1)
+    this.api.deleteOrder(deletedOrder).subscribe(res => {
+      console.log(res.json())
     })
+    this.store.loadOrders(this.orders)
   }
   
   viewOrder(order, event) {
@@ -66,14 +66,12 @@ export class OrdersPage {
   }
   ionViewWillEnter() {
     console.log("About to enter orders page")
+    this.api.getOrders()
     this.store.getOrders().subscribe(val => {
       this.orders = val
       console.log("Stored Orders ", val)
       console.log("This.orders ", this.orders)
     })
-  }
-  constructor(public navCtrl: NavController, public store: StorageService, public modalCtrl: ModalController, public db: Database, public popOver: PopoverController) {
-    
   }
 
 }

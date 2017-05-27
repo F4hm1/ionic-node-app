@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController, AlertController } from 'ionic-angular';
-import { StorageService, Order } from "../../providers/storage";
+import { StorageService } from "../../providers/storage";
 import { Database } from '../../providers/database';
+import { Api } from '../../providers/api';
 
 
 @IonicPage()
@@ -10,10 +11,12 @@ import { Database } from '../../providers/database';
   templateUrl: 'order-form.html',
 })
 export class OrderForm {
-  public order: Order = {
+  public order = {
     customer: 'Dele',
     phone: 0,
+    email: '',
     package: 5,
+    address: '',
     delivery: false,
     date : new Date()
   }
@@ -21,6 +24,7 @@ export class OrderForm {
     public navParams: NavParams, 
     public viewCtrl: ViewController, 
     public store: StorageService, 
+    public api: Api, 
     public alertCtrl:AlertController, 
     public db: Database) {
   }
@@ -29,15 +33,15 @@ export class OrderForm {
   }
   onSubmit() {
     if (this.order.customer.length < 3) this.presentAlert(`Customer name is invalid`)
-    else if (this.order.phone.toString().length < 9 || this.order.phone.toString().length > 11 ) this.presentAlert('Please input a valid Phone Number')
+    else if (this.order.phone.toString().length < 9 || this.order.phone.toString().length > 11 || !Number(this.order.phone)) {
+      this.presentAlert('Please input a valid Phone Number')
+    }
     else if (this.order.package < 1) this.presentAlert('Please input package Type')
     else {
       console.log(this.order)
-      this.store.addOrder(this.order).then(() => {
-        this.presentAlert();
+      this.api.createOrder(this.order).then(res=> {
+        this.presentAlert();  //change 4 one fine UI
         this.viewCtrl.dismiss()
-      }).then((val)=>{
-        this.db.syncOrders()
       })
     }
   } 

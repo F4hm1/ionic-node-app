@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IonicPage, NavController, NavParams, AlertController, LoadingController, Loading, } from 'ionic-angular';
 import { Auth } from '../../providers/auth';
+import { Api } from '../../providers/api';
 import { EmailValidator } from '../../validators/email';
 import { HomePage } from "../home/home";
 
@@ -29,6 +30,7 @@ export class SignUp {
     public navParams: NavParams, 
     public alertCtrl: AlertController, 
     public auth: Auth,
+    public api: Api,
     public db: Database,
     public store: StorageService,
     public formBuilder: FormBuilder,
@@ -52,15 +54,13 @@ export class SignUp {
   loginUser(){
     if (this.loginForm.value.email === "Melvin") {
       this.navCtrl.setRoot(HomePage)
-      this.store.setUser(this.loginForm.value.email)
-      this.db.getOrders()
     } else if (!this.loginForm.valid){
       console.log(this.loginForm.value);
     }else {
       this.auth.loginUser(this.loginForm.value.email, this.loginForm.value.password)
       .then( user => {
         this.store.setUser(user.uid);
-        this.db.setUp(user.uid)
+        this.api.getUser(this.loginForm.value.email)
         this.navCtrl.setRoot(HomePage);
       }, error => {
         this.loading.dismiss().then( () => {
@@ -77,21 +77,15 @@ export class SignUp {
       this.loading.present();
     }
   }
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad SignUp');
-  }
-  goToResetPassword() {
-    this.navCtrl.push(ForgotPassword)
-  }
   signupUser(){
     if (!this.signupForm.valid){
       console.log(this.signupForm.value);
     } else {
       this.auth.signupUser(this.signupForm.value.email, this.signupForm.value.password)
       .then((user) => {
-        this.auth.sendVerificationMail()//should use result to check if email actually exists before creating a/c 
+        this.auth.sendVerificationMail()
+        this.api.createUser(this.signupForm.value)
         this.store.setUser(user.uid); 
-        this.db.setUp(user.uid); 
         this.navCtrl.setRoot(HomePage);
       }, (error) => {
         this.loading.dismiss().then( () => {
@@ -121,6 +115,14 @@ export class SignUp {
       ]
     });
     alert.present();
+  }
+
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad SignUp');
+    this.store.clearStore()
+  }
+  goToResetPassword() {
+    this.navCtrl.push(ForgotPassword)
   }
 
 }

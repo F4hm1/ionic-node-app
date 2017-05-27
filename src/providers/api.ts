@@ -1,53 +1,111 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions } from '@angular/http';
-import { StorageService } from "./storage";
+import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
+import { Storage } from "@ionic/storage";
+import { StorageService } from "./storage";
 
-/*
-  Generated class for the Api provider.
-
-  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
-  for more info on providers and Angular 2 DI.
-*/
 @Injectable()
-export class ApiService {
-  headers = new Headers({ 'Content-Type': 'application/json' });
-  options = new RequestOptions({ headers: this.headers });
-  user
+export class Api {
 
-  constructor(public http: Http, public store: StorageService) {
+  constructor(public http: Http, public storage: Storage, public store: StorageService) {
     console.log('Hello Api Provider');
   }
-
-  createUser(email) {
-    console.log('Creating new user ', email)
-    return this.http.post("http://localhost:4012/api/new-user", {email}, this.options)
-  }
-  reloadUser(email) {
-    console.log('Reloading user ', email)
-    this.http.post("http://localhost:4012/api/get-orders", {email}, this.options).map(res=>{
-      return res.json()
-    }).subscribe((orders)=> {
-      //this.store.loadOrders(orders)
-    })
-    return this.http.post("http://localhost:4012/api/get-notifications", {email}, this.options).map(res=>{
-      return res.json()
-    }).subscribe((orders)=> {
-      this.store.loadNotifications(orders)
-    })
-  }
-  createOrder(order) {
-    order.user = this.store.getUser() ||"Ekene"
-    console.log("sending order")
-    return this.http.post("http://localhost:4012/api/new-order", {order}, this.options).map(res=> {
-      return res.json()
-    }).subscribe(console.log)
-  }
   
-  getNotifications() {
-    let email = this.store.getUser()
-    console.log("fetching notifications")
-    return this.http.post("http://localhost:4012/api/notify", {email}, this.options)        
+/* ------------------ ORDERS --------------*/
+
+  createOrder(order) {
+    console.log("api", order)
+    return this.storage.get("userID").then(id => {
+      order.user = id
+      console.log("ID is jusy",id)
+      this.http.post(`http://localhost:4012/api/orders/create`, order).subscribe(res => {
+        console.log("Ive ", res.json())
+        this.store.addOrder(res.json().result)
+      })
+    })
+  }
+  getOrders() {
+    return this.storage.get("userID").then(id => {
+      console.log(id)
+      this.http.get(`http://localhost:4012/api/orders/get/${id}`).subscribe(res => {
+        console.log("Orders: ", res.json())
+        this.store.loadOrders(res.json().result)
+        return res.json()
+      })
+    })
   }
 
+  updateOrders(order) {
+    return this.http.post(`http://localhost:4012/api/orders/update`, order).subscribe(res => {
+      console.log(res.json())
+      return res.json()
+    })
+  }
+
+  deleteOrder(order) {
+    let id = order[0]._id
+    return this.http.get(`http://localhost:4012/api/orders/delete/${id}`)
+  }
+
+
+
+/* ------------------ NOTIFICATIONS --------------*/
+
+  getNotifications() {
+    return this.storage.get("userID").then(id => {
+      console.log('notice id ', id)
+      this.http.get(`http://localhost:4012/api/notifications/${id}`).subscribe(res => {
+        console.log("Notices ",res.json())
+        this.store.loadNotifications(res.json().result)
+        return res.json()
+      })
+    })
+  }
+
+
+  /*---------- USERS ------------------------*/
+
+  createUser(user) {
+    return this.http.post(`http://localhost:4012/api/users/create`, user).map(res=> {
+      console.log(res.json())
+      this.storeUser(res.json().result)
+    }).subscribe()
+  }
+
+  updateUser(user) {
+    return this.storage.get("userID").then(id => {
+      user._id = id
+      this.http.post(`http://localhost:4012/api/users/update`, user).subscribe(res => {
+        console.log(res.json())
+        this.storeUser(res.json().result)
+        return res.json();
+      })
+    })
+  }
+
+  getUser(email) {
+    return this.http.post(`http://localhost:4012/api/users/get/`, {email: email}).subscribe(res => {
+      console.log("Welcome ", res.json()) 
+      this.storeUser(res.json().result)
+      this.onResume()
+      return res.json();
+    })
+  }
+
+  storeUser(user) {
+    this.store.setUser(user)
+  }
+
+  deleteUser() {
+    return this.storage.get("userID").then(id => {
+      this.http.get(`http://localhost:4012/api/users/delete/${id}`).subscribe(res => {
+        return res.json();
+      })
+    })
+  }
+
+  onResume() {
+    this.getNotifications()
+    this.getOrders()
+  }
 }

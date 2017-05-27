@@ -15,22 +15,22 @@
 
     <ion-item>
       <ion-label stacked>Username</ion-label>
-      <ion-input inset (ngModelChange)="showUsername()" [(ngModel)]="data.displayName" type="text"></ion-input>
+      <ion-input inset [(ngModel)]="data.username" type="text"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label stacked>Phone Number</ion-label>
-      <ion-input inset [(ngModel)]="data.phoneNumber" type="phone"></ion-input>
+      <ion-input inset [(ngModel)]="data.phone" type="phone"></ion-input>
     </ion-item>
 
-    <!--<ion-item>
-      <ion-label stacked>Email</ion-label>
-      <ion-input inset [(ngModel)]="data.email" type="email"></ion-input>
-    </ion-item>-->
+    <ion-item>
+      <ion-label stacked>Address</ion-label>
+      <ion-input inset [(ngModel)]="data.address" type="text"></ion-input>
+    </ion-item>
 
     <ion-item>
       <ion-label stacked>Input your password to save</ion-label>
-      <ion-input inset (ngModelChange)="showUsername()" [(ngModel)]="password" type="password"></ion-input>
+      <ion-input inset [(ngModel)]="password" type="password"></ion-input>
     </ion-item>
 
     <ion-list>

@@ -13,11 +13,9 @@
     Welcome to the Virtual Laundry App. Here you can a refer and prefer blash
   </p>
   <ion-buttons start>
-    <button ion-button (click)='fillOrderForm()'>Create Order</button> 
+    <button ion-button (click)='createOrder()'>Create Order</button> 
   </ion-buttons>
   <ion-buttons end>
     <button ion-button (click)='clearStore()'>Clear Data</button> 
   </ion-buttons>
-  <button ion-button (click)="check()">CHeck items</button>
-  <h6>{{ items | async | json}}</h6>
 </ion-content>
